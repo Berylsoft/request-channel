@@ -44,15 +44,19 @@ impl<Res> ResRx<Res> {
     }
 }
 
+#[derive(Debug)]
 pub struct ReqSendError<R: Req>(pub R);
 
+#[derive(Debug)]
 pub struct ResSendError<Res>(pub Res);
 
+#[derive(Debug)]
 pub enum ResRecvError {
     RecvError,
     RecvTimeout,
 }
 
+#[derive(Debug)]
 pub enum ReqError<R: Req> {
     SendError(R),
     RecvError,
