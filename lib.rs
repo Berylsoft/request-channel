@@ -1,15 +1,6 @@
 use tokio::time::{timeout, Duration};
 pub(crate) use tokio::sync::oneshot::{channel as _res_channel, Sender as _ResTx, Receiver as _ResRx};
 
-pub trait Req {
-    type Res;
-}
-
-pub struct ReqPayload<R: Req> {
-    pub req: R,
-    pub res_tx: ResTx<R::Res>,
-}
-
 pub struct ResTx<Res> {
     res_tx: _ResTx<Res>,
 }
@@ -45,7 +36,7 @@ impl<Res> ResRx<Res> {
 }
 
 #[derive(Debug)]
-pub struct ReqSendError<R: Req>(pub R);
+pub struct ReqSendError<Req>(pub Req);
 
 #[derive(Debug)]
 pub struct ResSendError<Res>(pub Res);
@@ -57,8 +48,8 @@ pub enum ResRecvError {
 }
 
 #[derive(Debug)]
-pub enum ReqError<R: Req> {
-    SendError(R),
+pub enum ReqError<Req> {
+    SendError(Req),
     RecvError,
     RecvTimeout,
 }
