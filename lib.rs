@@ -11,8 +11,8 @@ pub struct ResRx<Res> {
 }
 
 impl<Res> ResTx<Res> {
-    pub fn send(self, response: Res) -> Result<(), ResSendError<Res>> {
-        self.res_tx.send(response).map_err(ResSendError)
+    pub fn send(self, response: Res) -> Result<(), Res> {
+        self.res_tx.send(response)
     }
 
     pub fn is_closed(&self) -> bool {
@@ -36,12 +36,6 @@ impl<Res> ResRx<Res> {
 }
 
 #[derive(Debug)]
-pub struct ReqSendError<Req>(pub Req);
-
-#[derive(Debug)]
-pub struct ResSendError<Res>(pub Res);
-
-#[derive(Debug)]
 pub enum ResRecvError {
     RecvError,
     RecvTimeout,
@@ -49,9 +43,9 @@ pub enum ResRecvError {
 
 #[derive(Debug)]
 pub enum ReqError<Req> {
-    SendError(Req),
-    RecvError,
-    RecvTimeout,
+    ReqSendError(Req),
+    ResRecvError,
+    ResRecvTimeout,
 }
 
 pub mod bounded;
